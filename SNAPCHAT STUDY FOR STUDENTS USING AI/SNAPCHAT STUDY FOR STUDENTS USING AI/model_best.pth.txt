@@ -1,0 +1,18 @@
+import os, json, argparse, torch, warnings
+warnings.filterwarnings("ignore")
+
+import models as module_arch
+import evaluation.losses as module_loss
+import evaluation.metrics as module_metric
+import dataloaders.dataloader as module_data
+
+checkpoint = torch.load(resume)
+state_dict =checkpoint['state_dict']
+
+from collections import OrderedDict
+new_state_dict = OrderedDict()
+for k, v in state_dict.items():
+    name = k[7:] # remove 'module.' of dataparallel
+    new_state_dict[name]=v
+
+model.load_state_dict(new_state_dict) 
